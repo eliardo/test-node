@@ -7,7 +7,7 @@ docker-compose up --build
 
 ```
 
-
+O serviço irá criar o database postgress e estará disponível na porta 3000
 
 ### Descrição
 Serviço responsável por gcriar e atualizar usuários, salvando usuários em banco de dados PostgreSQL. A atualização de usuários é protegida por Authorization Bearer token, a obtenção do token JWT é feita atráves da API login.
@@ -19,10 +19,6 @@ Senhas de usuários são salvos criptografadas usando bcrypt na geração do has
 * Realiza login;<br />
 * Realiza update de dados do usuário;<br />
 
-
-## Swagger
-Swagger implementado e disponível em /v1/index<br />
-Acesse /v1/index e terá de maneira visual os endpoints disponíveis na API, cada um com seus requests e possíveis responses
 
 ## Usuários
 
