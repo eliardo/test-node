@@ -1,0 +1,29 @@
+version: "3.2"
+services:
+  nodejs:
+    build: 
+      context: .
+    image: eliardo/node-postgres-app
+    networks:
+      - frontend
+      - backend
+    environment:
+      - POSTGRES_HOST=node-postgres-app
+      - POSTGRES_USER=myuser
+      - POSTGRES_PASSWORD=mypass
+      - POSTGRES_DB=node_db
+    ports:
+      - "3000:3000"
+    container_name: node-app
+  postgres:
+    image: postgres
+    networks:
+      - backend
+    environment:
+      - POSTGRES_USER=myuser
+      - POSTGRES_PASSWORD=mypass
+      - POSTGRES_DB=node_db
+    container_name: node-postgres-app
+networks:
+  frontend:
+  backend:

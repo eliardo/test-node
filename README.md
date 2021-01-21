@@ -1,82 +1,106 @@
- # Test Node
 
-Esta é uma aplicação [Node](https://nodejs.org/en/) simples para avaliar o conhecimento do candidato para uma vaga de desenvolvedor backend para [Trademaster Servicos e Participações S.A.](https://www.trademaster.com.br/) 
+## Project setup and run
 
-## TODO
-[PR](https://docs.github.com/pt/free-pro-team@latest/github/collaborating-with-issues-and-pull-requests/about-pull-requests) é a melhor maneira de propor alterações na base de código (usamos o [Github Flow](https://guides.github.com/introduction/flow/index.html)). Acolhemos e analisamos ativamente suas requisições:
-
-1. Faça o fork do repo e crie seu branch a partir do principal.
-2. Se você adicionou um código que deve ser testado, adicione testes.
-3. Se você mudou APIs, atualize a documentação.
-4. Certifique-se de que o conjunto de testes seja aprovado.
-5. Certifique-se de que seu código seja executado.
-6. Emita essa solicitação pull!
-
-## Requisitos
-Construir o conjunto de APIs abaixo. APIs estas que farão operações sobre uma tabela de banco de dados relacional (postgresql).
-  
-1. __GET__ _/api/login?user={user}&pwd={senha}_
-
-_Response:_
-```json
-{
-  "token": "JWT"
-}
-  
 ```
 
-2. __POST__ _/api/user_
-_Request:_
-```json
-{
-  "user": "jsilva",
-  "name": "João da Silva",
-  "status": "ativo",
-  "password": "123456"
-}
-  
-```
-_Response:_
-```json
-{
-  "id": "1",
-  "user": "jsilva",
-  "name": "João da Silva",
-  "status": "ativo",
-  "password": "123456"
-}
+docker-compose up --build
+
 ```
 
-3. __PATCH__ _/api/user/{user_id}_
-_Request:_
-```json
-{
-  "name": "João Alves da Silva",
-  "password": "123"
-}
-  
+
+
+### Descrição
+Serviço responsável por gcriar e atualizar usuários, salvando usuários em banco de dados PostgreSQL. A atualização de usuários é protegida por Authorization Bearer token, a obtenção do token JWT é feita atráves da API login.
+
+Senhas de usuários são salvos criptografadas usando bcrypt na geração do hash.
+
+**Funcionalidades**
+* Realiza a criação de uma usuário;<br />
+* Realiza login;<br />
+* Realiza update de dados do usuário;<br />
+
+
+## Swagger
+Swagger implementado e disponível em /v1/index<br />
+Acesse /v1/index e terá de maneira visual os endpoints disponíveis na API, cada um com seus requests e possíveis responses
+
+## Usuários
+
+Tabela Users
+
+    | Campos       | Tipo     | 
+    | ---          | ---      | 
+    | id           | Numérico | 
+    | user         | String   | 
+    | name         | String   | 
+    | status       | String   | 
+    | password     | String   | 
+
+
+
+### Criar usuário
 ```
-_Response:_
-```json
+POST /api/v1/users
+
 {
-  "id": "1",
-  "user": "jsilva",
-  "name": "João Alves da Silva",
-  "status": "ativo",
-  "password": "123"
+    "user": "eliardo",
+    "status": "active",
+    "name": "name",
+    "password": "minhasenha"
+}
+
+
+```
+
+**Response**
+```
+{
+    "id": 1,
+    "user": "eliardo",
+    "name": "name",
+    "status": "active",
+    "password": "minhasenha"
 }
 ```
-### Bonus
 
-1. Para todas as APIs requeridas acima (exceto Login), deverá também haver uma forma de fazer a mesma operação via filas Rabbitmq.
-2. Caso conheça [Typescript](https://www.typescriptlang.org/) este teste deve ser realizado nesta linguage.
-
-## Requisitos de Aceite
-
-1. O sistema deve rodar com um docker-compose através do comando abaixo, que iniciará o serviço web na porta __3000__.
-```bash
-$ docker-compose up
+### Login - obtençao de token
 ```
-2. O docker compose em questão deve criara toda a infraestrura de software necessária para que aplicação funcione.
-3. Este readme deve ser sobrescrito, adicionando aqui a documentação para a utilização do sistema.
+
+GET /api/v1/login?user=eliardo&pwd=minhasenha
+
+```
+
+
+**Response**
+```
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlciI6ImVsaWFyZG8iLCJuYW1lIjoibmFtZSIsImlhdCI6MTYxMTExMjU1NSwiZXhwIjoxNjExMTE2MTU1fQ.La8eRMx2NmCH3yaxHxqXjxzoyOwZQ5jMRlldwYgvZag"
+}
+```
+
+### Alterar usuário
+```
+
+PATH /api/v1/users/{userId}
+Authorization Bearer token
+
+Body:
+{
+    "user": "eliardo_001",
+    "status": "bloqueado"
+}
+
+```
+Token da auhorization obtido em /login
+
+**Response**
+```
+{
+    "id": 1,
+    "user": "eliardo_001",
+    "name": "name",
+    "status": "bloqueado",
+    "password": "minhasenha"
+}
+```
 
